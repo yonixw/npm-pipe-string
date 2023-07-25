@@ -13,10 +13,12 @@ process.on('uncaughtExceptionMonitor', (err, origin) => {
 let myArgs = process.argv;
 let stdinFound = process.stdin.isTTY !== true; // https://stackoverflow.com/a/39801858/1997873
 
-let help_flag = myArgs.indexOf('-h') > -1 || myArgs.indexOf('--help') > -1;
+let help_flag = myArgs.indexOf('-h') > -1 ||
+    myArgs.indexOf('--help') > -1;
 let quiet_flag = myArgs.indexOf('-q') > -1;
 let ascii_flag = myArgs.indexOf('--ascii') > -1;
-let keep_empty_flag = myArgs.indexOf('--keep-empty') > -1;
+let keep_empty_flag = myArgs.indexOf('-k') > -1 ||
+    myArgs.indexOf('--keep-empty') > -1;
 let verbose_flag = myArgs.indexOf('--verbose') > -1;
 
 if (help_flag) {
@@ -52,9 +54,13 @@ process.stdin.on('data', (d) => result += d.toString(ascii_flag ? "ascii" : "utf
 
 process.stdin.once('end', () => {
     let func = new Function("d", "l", "return " + myArgs[myArgs.length - 1]);
+    let lines = result.split(EOL);
+    if (!keep_empty_flag) {
+        lines = lines.filter(e => !!e && e.length > 0)
+    }
     process.stdout.write(
         func.call({},
-            result, result.split(EOL)
+            lines.join(EOL), lines
         )
         || ""
     );

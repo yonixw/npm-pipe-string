@@ -1,6 +1,6 @@
 {
   "name": "pipestr",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "main.js",
   "repository": "https://github.com/yonixw/npm-pipe-string.git",
   "author": "Yoni Water Man <yonixw@gmail.com>",
