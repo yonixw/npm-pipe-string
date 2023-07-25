@@ -1,3 +1,5 @@
+#! /usr/bin/env node
+
 const { EOL } = require("os");
 
 process.on('unhandledRejection', error => {
